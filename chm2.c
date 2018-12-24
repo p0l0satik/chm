@@ -58,9 +58,9 @@ void runge_kutt_sys2(int steps, double *y, double x, double **sol, double h) {
         }
         for (int k = 0; k < 2; k++){
             if (k == 0) {
-                y[0] = y[0] + (sys(x, y[0], y[1], k) + sys(x, y_w[0], y[1], k)) * h / 2;
+                y[0] = y[0] + (sys(x, y[0], y[1], k) + sys(x + h, y_w[0], y[1], k)) * h / 2;
             } else {
-                y[1] = y[1] + (sys(x, y[0], y[1], k) + sys(x, y[0], y_w[1], k)) * h / 2;
+                y[1] = y[1] + (sys(x, y[0], y[1], k) + sys(x + h, y[0], y_w[1], k)) * h / 2;
             }
             
             sol[k][t + 1] = y[k];
