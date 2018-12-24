@@ -57,7 +57,12 @@ void runge_kutt_sys2(int steps, double *y, double x, double **sol, double h) {
             y_w[k] = y[k] + sys(x, y[0], y[1], k) * h;
         }
         for (int k = 0; k < 2; k++){
-            y[k] = y[k] + (sys(x, y[0], y[1], k) + sys(x, y_w[0], y_w[1], k)) * h / 2;
+            if (k == 0) {
+                y[0] = y[0] + (sys(x, y[0], y[1], k) + sys(x, y_w[0], y[1], k)) * h / 2;
+            } else {
+                y[1] = y[1] + (sys(x, y[0], y[1], k) + sys(x, y[0], y_w[1], k)) * h / 2;
+            }
+            
             sol[k][t + 1] = y[k];
         }
         x += h;
@@ -126,7 +131,7 @@ int main(int argc, char const *argv[])
     double y[2];
     printf("enter y1 y2\n");
     scanf("%lf%lf", &y[0], &y[1]);
-    runge_kutt_sys4(steps, y, a, sys_sol, h);
+    runge_kutt_sys2(steps, y, a, sys_sol, h);
     FILE *out[2] = {fopen("s1out.txt", "w"), fopen("s2out.txt", "w")};
     for (int k = 0; k < 2; k++) {
         for (int t = 0; t < steps; t++) {
